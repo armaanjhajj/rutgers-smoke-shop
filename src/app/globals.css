@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+:root {
+  --rutgers-red: #cc0033;
+  --rutgers-black: #000000;
+  --rutgers-white: #ffffff;
+}
+
+body { @apply bg-white text-black; }
+
+.btn { @apply inline-flex items-center justify-center rounded-md px-4 py-2 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed; }
+
+.btn-primary {
+  background-color: var(--rutgers-red);
+  color: var(--rutgers-white);
+}
+.btn-primary:hover { background-color: #b3002d; }
+
+.input { @apply border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-600; }
+
+.card { @apply rounded-lg border border-gray-200 bg-white shadow-sm; }
+
+.progress { @apply w-full bg-gray-200 rounded-full overflow-hidden h-3; }
+.progress-bar {
+  background-color: var(--rutgers-red);
+  @apply h-3 text-xs text-white text-center;
+}
