@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="w-10 h-10 flex items-center justify-center bg-[var(--rutgers-red)] text-white font-black text-2xl leading-none rounded-md">R</div>
             <div>
               <h1 className="text-xl font-bold text-black">Rutgers Smoke Shop</h1>
-              <p className="text-sm text-gray-600">Rewards to $200 · Red, White, and Black</p>
+              <p className="text-sm text-gray-600">Loyalty tracker for rewards</p>
             </div>
           </div>
         </header>

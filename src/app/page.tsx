@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { dollarsToProgressPercent, formatCurrency, formatLastVisit } from '@/lib/client';
+import { dollarsToProgressPercent, formatCurrency, formatLastVisit, safeJson } from '@/lib/client';
 
 type Customer = {
   id: string;
@@ -31,7 +31,7 @@ export default function HomePage() {
     try {
       const url = q && q.trim() ? `/api/customers?q=${encodeURIComponent(q)}` : '/api/customers';
       const res = await fetch(url, { cache: 'no-store' });
-      const data = (await res.json()) as unknown as ApiList;
+      const data = (await safeJson<ApiList>(res)) || { customers: [] };
       setCustomers(Array.isArray(data.customers) ? data.customers : []);
     } catch {
       setError('Failed to load customers');
@@ -61,9 +61,9 @@ export default function HomePage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name }),
       });
-      const data = (await res.json()) as unknown;
+      const data = await safeJson<{ customer?: Customer; error?: string }>(res);
       if (!res.ok) {
-        const msgCandidate = (data as { error?: unknown })?.error;
+        const msgCandidate = data?.error;
         const message = typeof msgCandidate === 'string' ? msgCandidate : 'Add failed';
         throw new Error(message);
       }
@@ -88,9 +88,9 @@ export default function HomePage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount }),
       });
-      const data = (await res.json()) as unknown;
+      const data = await safeJson<{ customer?: Customer; error?: string }>(res);
       if (!res.ok) {
-        const msgCandidate = (data as { error?: unknown })?.error;
+        const msgCandidate = data?.error;
         const message = typeof msgCandidate === 'string' ? msgCandidate : 'Increment failed';
         throw new Error(message);
       }
@@ -110,7 +110,7 @@ export default function HomePage() {
         <form onSubmit={onSearch} className="flex flex-col gap-2 sm:flex-row">
           <input
             className="input flex-1"
-            placeholder="Search customers (case-insensitive)"
+            placeholder="Search customers"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
@@ -187,7 +187,7 @@ export default function HomePage() {
       </section>
 
       <footer className="text-center text-sm text-gray-500">
-        Scarlet Knights colors © Rutgers University. This site is for a smoke shop loyalty tracker.
+        a boombaaj production © loyalty tracker for our dear friend, abdul's shop, made by Armaan.
       </footer>
     </div>
   );
